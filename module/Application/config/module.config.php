@@ -4,23 +4,17 @@ declare(strict_types=1);
 
 namespace Application;
 
+use Application\Controller\HomeController;
+use Application\Controller\AccountController;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\Router\Http\Method;
 
 return [
     'router' => [
         'routes' => [
-            'home' => [
-                'type'    => Literal::class,
-                'options' => [
-                    'route'    => '/',
-                    'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
-                    ],
-                ],
-            ],
             'application' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -31,11 +25,53 @@ return [
                     ],
                 ],
             ],
+            'home' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/',
+                    'defaults' => [
+                        'controller' => Controller\HomeController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+            'createAccount' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/createAccount[/:action]',
+                    'defaults' => [
+                        'controller' => Controller\AccountController::class,
+                        'action'     => 'create',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'processar' => [
+                        'type' => Method::class,
+                        'options' => [
+                            'verb' => 'post',
+                            'route' => '/processar',
+                            'defaults' => [
+                                'action' => 'processar',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => InvokableFactory::class,
+            HomeController::class => function($c) {
+                return new HomeController(
+                    $c->get(Adapter::class)
+                );
+            },
+            AccountController::class => function($c) {
+                return new AccountController(
+                    $c->get(Adapter::class)
+                );
+            },
         ],
     ],
     'view_manager' => [
@@ -44,6 +80,9 @@ return [
         'doctype'                  => 'HTML5',
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
+        'strategies' => [
+            'ViewJsonStrategy',
+        ],
         'template_map' => [
             'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',

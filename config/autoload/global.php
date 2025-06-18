@@ -13,5 +13,17 @@
  */
 
 return [
-    // ...
+    'db' => [
+        'driver'   => 'Pdo_Mysql',
+        'database' => 'task',
+        'username' => 'root',
+        'password' => '',
+        'hostname' => 'localhost',
+        'charset'  => 'utf8mb4',
+    ],
+    'service_manager' => [
+        'factories' => [
+            Laminas\Db\Adapter\Adapter::class => Laminas\Db\Adapter\AdapterServiceFactory::class,
+        ],
+    ],
 ];

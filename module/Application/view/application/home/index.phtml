@@ -1,0 +1,198 @@
+<?php
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ */
+$title = 'Login';
+$this->headTitle($title);
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?= $this->headTitle() ?>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1000px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .welcome-panel {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            transition: all 0.5s ease;
+        }
+        
+        .welcome-panel:hover {
+            flex: 1.5;
+        }
+        
+        .welcome-panel h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-panel p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .login-panel {
+            width: 400px;
+            background: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .login-panel h2 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(37, 117, 252, 0.3);
+        }
+        
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .link {
+            color: #2575fc;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .welcome-panel {
+                width: 100%;
+                padding: 30px;
+            }
+            
+            .login-panel {
+                width: 100%;
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="welcome-panel">
+            <h1>Schedule your activities</h1>
+            <p>In our system, you can schedule your task and manage them, join now and organize your routine =)</p>
+        </div>
+        
+        <div class="login-panel">
+            <h2>Login</h2>
+            <form action="" method="post">
+                <div class="form-group">
+                    <label for="email">E-mail or Login</label>
+                    <input type="text" id="email" name="email" placeholder="E-mail or login">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Password">
+                </div>
+                
+                <button type="submit" class="btn">Log In</button>
+                
+                <div class="links">
+                    <a href="<?= $this->url('createAccount') ?>" class="link">Create new account</a>
+                    <a href="" class="link">Forgot password</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <?php 
+    if (isset($this->messages) && !empty($this->messages)): ?>
+        <script>
+            alert("<?= addslashes(implode('\n', $this->messages)) ?>");
+        </script>
+    <?php endif; ?>
+</body>
+</html>
