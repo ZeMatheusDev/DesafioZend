@@ -45,7 +45,7 @@ $transport->setOptions(new SmtpOptions([
     'connection_class'  => 'login',
     'connection_config' => [
         'username' => 'ovelhoeomar123@gmail.com',
-        'password' => 'ipth hqtu pffe dwcg', 
+        'password' => '', 
         'ssl'      => 'tls',
     ],
 ]));
