@@ -14,6 +14,7 @@ use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Insert;
 use Laminas\Validator\Regex;
 use Laminas\Session\Container;
+use Application\Middleware\AbstractAuthController;
 
 class AccountController extends AbstractAuthController
 {

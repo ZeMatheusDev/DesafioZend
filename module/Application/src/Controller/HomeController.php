@@ -9,6 +9,7 @@ use Laminas\View\Model\ViewModel;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\View\Model\JsonModel;
 use Laminas\Session\Container;
+use Application\Middleware\AbstractAuthController;
 
 class HomeController extends AbstractAuthController
 {

@@ -8,6 +8,7 @@ use Laminas\View\Model\ViewModel;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\Sql\Sql;
 use Laminas\Session\Container;
+use Application\Middleware\AbstractNoAuthController;
 
 class DashboardController extends AbstractNoAuthController
 {

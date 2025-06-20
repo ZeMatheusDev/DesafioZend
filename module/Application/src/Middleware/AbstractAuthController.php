@@ -1,5 +1,5 @@
 <?php
-namespace Application\Controller;
+namespace Application\Middleware;
 
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Session\Container;

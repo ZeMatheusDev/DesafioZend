@@ -16,6 +16,7 @@ use Laminas\Db\Sql\Insert;
 use Laminas\Validator\Regex;
 use Laminas\Session\Container;
 use Laminas\Db\Sql\Expression;
+use Application\Middleware\AbstractNoAuthController;
 
 class TaskController extends AbstractNoAuthController
 {
