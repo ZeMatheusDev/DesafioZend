@@ -199,6 +199,8 @@ $this->headTitle($title);
         const json = await response.json();
         const toast = document.getElementById('toast');
         if (json.success) {
+            console.log(json);
+            
             toast.textContent = json.message;
             toast.style.background = '#28a745';
             toast.classList.add('show');
@@ -207,10 +209,25 @@ $this->headTitle($title);
                 window.location = '/';
             }, 1000);
         } else {
-            toast.textContent = Object.values(json.messages).flat().join(' • ');
-            toast.style.background = '#dc3545';
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+  const msgs = Object.entries(json.messages)
+    .flatMap(([field, val]) => {
+      // garante que temos um array
+      const arr = Array.isArray(val) ? val : [val];
+      // pra cada item, pode ser objeto { rule: "mensagem" } ou string
+      return arr.map(item => {
+        if (typeof item === 'object' && item !== null) {
+          // pega o primeiro valor do objeto
+          return Object.values(item)[0];
+        }
+        // se já for string, retorna direto
+        return String(item);
+      });
+    });
+
+  toast.textContent = msgs.join(' • ');
+  toast.style.background = '#dc3545';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
         }
     });
     </script>

@@ -147,15 +147,15 @@ class AccountController extends AbstractAuthController
         $passwordNotEmpty = new NotEmpty();
 
         if (empty($data['username']) || !$usernameValidator->isValid($data['username'])) {
-            $messages['username'] = $usernameValidator->getMessages() ?: ['Username is required'];
+            $messages['username'][] = $usernameValidator->getMessages() ?: ['Username is required'];
             $hasErrors = true;
         }
         if (empty($data['email']) || !$emailValidator->isValid($data['email'])) {
-            $messages['email'] = $emailValidator->getMessages() ?: ['Incorrect e-mail'];
+            $messages['email'][] = $emailValidator->getMessages() ?: ['Incorrect e-mail'];
             $hasErrors = true;
         }
         if (empty($data['password']) || !$passwordValidator->isValid($data['password'])) {
-            $messages['password'] = $passwordValidator->getMessages() ?: ['Incorrent password'];
+            $messages['password'][] = $passwordValidator->getMessages() ?: ['Incorrent password'];
             $hasErrors = true;
         }
         if ($hasErrors) {
@@ -187,7 +187,7 @@ class AccountController extends AbstractAuthController
         } catch (\Exception $e) {
             return new JsonModel([
                 'success'  => false,
-                'messages' => ['Contact to support: ' . $e->getMessage()],
+                'messages' => ['Error: ' . $e->getMessage()],
             ]);
         }
     }

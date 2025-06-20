@@ -101,6 +101,10 @@ return [
                     $c->get(Adapter::class)
                 );
             },
+            'factories' => [
+                Controller\TaskReminderController::class
+                    => InvokableFactory::class,
+            ],
             DashboardController::class => function($c) {
                 return new DashboardController(
                     $c->get(Adapter::class)

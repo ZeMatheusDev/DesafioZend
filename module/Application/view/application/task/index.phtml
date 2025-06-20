@@ -557,9 +557,12 @@ $this->headTitle($title);
                                             <?php endif; ?>
                                         <?php endif; ?>
 
+                                        <?php if ($task['status'] == 'pending'): ?>
                                         <a href="<?= $this->url('task',['action'=>'edit','token'=>$task['token']]) ?>" class="btn-action edit">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
+                                        <?php endif; ?>
+
                                         <a href="<?= $this->url('task',['action'=>'delete','token'=>$task['token']]) ?>"
                                            class="btn-action delete" data-token="<?= $task['token'] ?>">
                                             <i class="fas fa-trash"></i> Delete

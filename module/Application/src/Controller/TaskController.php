@@ -36,7 +36,7 @@ class TaskController extends AbstractNoAuthController
         $perPage    = (int) $this->params()->fromQuery('perPage',   10);
         $offset     = ($page - 1) * $perPage;
 
-        $titulo       = trim($this->params()->fromQuery('titulo', ''));
+        $titulo       = trim($this->params()->fromQuery('title', ''));
         $descricao    = trim($this->params()->fromQuery('description', ''));
         $taskDate     = trim($this->params()->fromQuery('task_date', ''));      
         $status       = trim($this->params()->fromQuery('status', ''));
@@ -60,7 +60,7 @@ class TaskController extends AbstractNoAuthController
                 'user_id'    => $userId,
                 'deleted_at' => null,
             ]);
-
+      
         if ($titulo !== '') {
             $countSelect->where->like('title', "%{$titulo}%");
         }

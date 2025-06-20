@@ -26,9 +26,4 @@ return [
             Laminas\Db\Adapter\Adapter::class => Laminas\Db\Adapter\AdapterServiceFactory::class,
         ],
     ],
-    'laminas-cli' => [
-        'commands' => [
-            'app:daily-task' => App\Command\DailyTaskCommand::class,
-        ],
-    ],
 ];
