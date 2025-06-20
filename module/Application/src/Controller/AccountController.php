@@ -246,7 +246,7 @@ class AccountController extends AbstractAuthController
         }
 
         $sql    = new Sql($this->dbAdapter);
-        $select = $sql->select()->from('users')
+        $select = $sql->select()->from('users')->where(['deleted_at' => null])
                        ->columns(['id','username','email','password']);
         $select->where
                ->nest()

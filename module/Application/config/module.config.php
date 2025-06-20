@@ -40,9 +40,9 @@ return [
                 ],
             ],
             'dashboard' => [
-                'type'    => Literal::class,
+                'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/dashboard',
+                    'route'    => '/dashboard[/:action]',
                     'defaults' => [
                         'controller' => Controller\DashboardController::class,
                         'action'     => 'index',

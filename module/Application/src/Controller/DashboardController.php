@@ -84,4 +84,53 @@ class DashboardController extends AbstractNoAuthController
             'recentTasks' => $recentTasks
         ]);
     }
+
+    public function calendarAction()
+    {
+        $container = new Container();
+        $session = $container->user;
+        $userId = $session['id'];
+        $sql = new Sql($this->dbAdapter);
+
+        $select = $sql->select()
+            ->from('tasks')
+            ->columns(['id', 'title', 'task_date', 'status'])
+            ->where([
+                'user_id' => $userId,
+                'deleted_at' => null
+            ])
+            ->where('task_date IS NOT NULL'); 
+
+        $statement = $sql->prepareStatementForSqlObject($select);
+        $results = $statement->execute();
+
+        $tasks = [];
+        foreach ($results as $row) {
+            $date = new \DateTime($row['task_date']);
+            $row['iso_date'] = $date->format('c');
+            
+            $row['status_class'] = match($row['status']) {
+                'pending' => 'fc-event-pending',
+                'in_progress' => 'fc-event-in-progress',
+                'completed' => 'fc-event-completed',
+                default => ''
+            };
+            
+            $tasks[] = $row;
+        }
+        $userSelect = $sql->select()
+        ->from('users')
+        ->columns(['id', 'username', 'email', 'created_at'])
+        ->where(['id' => $userId]);
+
+        $statement = $sql->prepareStatementForSqlObject($userSelect);
+        $userQuery = $statement->execute();
+        $userResult = iterator_to_array($userQuery);
+        $username = $userResult[0]['username'];
+        $initial = mb_substr($username, 0, 1);
+        return new ViewModel([
+            'tasks' => $tasks,
+            'initial' => $initial,
+        ]);
+    }
 }
