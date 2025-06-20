@@ -8,8 +8,9 @@ use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\View\Model\JsonModel;
+use Laminas\Session\Container;
 
-class HomeController extends AbstractActionController
+class HomeController extends AbstractAuthController
 {
     private Adapter $dbAdapter;
 

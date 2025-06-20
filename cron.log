@@ -1,0 +1,39 @@
+[2025-06-20 05:10:26] Iniciando tarefa diária: 2025-06-20 05:10:26
+[2025-06-20 05:10:26] ERRO no banco de dados: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'completed' in 'where clause'
+[2025-06-20 05:10:43] Iniciando tarefa diária: 2025-06-20 05:10:43
+[2025-06-20 05:10:43] ERRO no banco de dados: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'completed' in 'where clause'
+[2025-06-20 05:10:47] Iniciando tarefa diária: 2025-06-20 05:10:47
+[2025-06-20 05:10:51] Iniciando tarefa diária: 2025-06-20 05:10:51
+[2025-06-20 05:10:51] ERRO no banco de dados: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'completed' in 'where clause'
+[2025-06-20 05:11:11] Iniciando tarefa diária: 2025-06-20 05:11:11
+[2025-06-20 05:11:11] ERRO no banco de dados: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'completed' in 'where clause'
+[2025-06-20 05:12:55] Iniciando tarefa diária: 2025-06-20 05:12:55
+[2025-06-20 05:12:55] ERRO no banco de dados: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'completed' in 'where clause'
+[2025-06-20 05:12:59] Iniciando tarefa diária: 2025-06-20 05:12:59
+[2025-06-20 05:12:59] ERRO no banco de dados: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'completed' in 'where clause'
+[2025-06-20 05:13:22] Iniciando tarefa diária: 2025-06-20 05:13:22
+[2025-06-20 05:13:27] Iniciando tarefa diária: 2025-06-20 05:13:27
+[2025-06-20 05:13:27] ERRO no banco de dados: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_email' in 'field list'
+[2025-06-20 05:13:30] Iniciando tarefa diária: 2025-06-20 05:13:30
+[2025-06-20 05:13:30] ERRO no banco de dados: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_email' in 'field list'
+[2025-06-20 05:13:44] Iniciando tarefa diária: 2025-06-20 05:13:44
+[2025-06-20 05:16:55] Iniciando tarefa diária: 2025-06-20 05:16:55
+[2025-06-20 05:16:55] ERRO no banco de dados: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_email' in 'field list'
+[2025-06-20 05:17:08] [INFO] Iniciando tarefa diária
+[2025-06-20 05:17:08] [INFO] Tarefas próximas do prazo encontradas: 2
+[2025-06-20 05:17:08] [INFO] Tarefa #1 'teste2323' vence em 2025-06-21 00:00:00 - Usuário: ovelhoeomar123@gmail.com
+[2025-06-20 05:17:08] [INFO] Tarefa #3 'teste2' vence em 2025-06-21 00:00:00 - Usuário: ovelhoeomar123@gmail.com
+[2025-06-20 05:17:08] [INFO] Total de tarefas no sistema: 11
+[2025-06-20 05:17:08] [INFO] Tarefa diária concluída com sucesso!
+[2025-06-20 05:17:31] [INFO] Iniciando tarefa diária
+[2025-06-20 05:17:31] [INFO] Tarefas próximas do prazo encontradas: 2
+[2025-06-20 05:17:31] [INFO] Tarefa #1 'teste2323' vence em 2025-06-21 00:00:00 - Usuário: ovelhoeomar123@gmail.com
+[2025-06-20 05:17:31] [INFO] Tarefa #3 'teste2' vence em 2025-06-21 00:00:00 - Usuário: ovelhoeomar123@gmail.com
+[2025-06-20 05:17:31] [INFO] Total de tarefas no sistema: 11
+[2025-06-20 05:17:31] [INFO] Tarefa diária concluída com sucesso!
+[2025-06-20 05:17:32] [INFO] Iniciando tarefa diária
+[2025-06-20 05:17:32] [INFO] Tarefas próximas do prazo encontradas: 2
+[2025-06-20 05:17:32] [INFO] Tarefa #1 'teste2323' vence em 2025-06-21 00:00:00 - Usuário: ovelhoeomar123@gmail.com
+[2025-06-20 05:17:32] [INFO] Tarefa #3 'teste2' vence em 2025-06-21 00:00:00 - Usuário: ovelhoeomar123@gmail.com
+[2025-06-20 05:17:32] [INFO] Total de tarefas no sistema: 11
+[2025-06-20 05:17:32] [INFO] Tarefa diária concluída com sucesso!

@@ -1,0 +1,667 @@
+<?php
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ */
+
+use Laminas\Session\Validator\Id;
+
+$title = 'Task Management';
+$this->headTitle($title);
+?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?= $this->headTitle() ?>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        a{
+            color: white;
+            text-decoration: none;
+        }
+
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            padding: 0;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .logo {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid white;
+        }
+        
+        .menu-item i {
+            width: 30px;
+            font-size: 18px;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .logout-btn {
+            background: transparent;
+            border: none;
+            color: #6a11cb;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logout-btn i {
+            margin-left: 5px;
+        }
+
+        .btn-action.start {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+        }
+
+        .btn-action.reopen {
+            background: rgba(243, 156, 18, 0.1);
+            color: #f39c12;
+            border: 1px solid rgba(243, 156, 18, 0.2);
+        }
+
+        .btn-action.complete {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+        }
+        
+        .content-area {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: #2575fc;
+        }
+
+        .task-actions {
+            margin-bottom: 20px;
+        }
+        
+        .btn-add {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            min-width: 200px;
+            padding: 15px 20px;
+            background:rgb(214, 0, 0);
+            color: white;
+            border-radius: 5px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        #toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.3);
+        }
+        
+        .btn-add i {
+            margin-right: 5px;
+        }
+        
+        .tasks-table {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-action {
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .btn-action i {
+            margin-right: 5px;
+        }
+        
+        .btn-action.edit {
+            background: rgba(37, 117, 252, 0.1);
+            color: #2575fc;
+            border: 1px solid rgba(37, 117, 252, 0.2);
+        }
+        
+        .btn-action.edit:hover {
+            background: rgba(37, 117, 252, 0.2);
+        }
+        
+        .btn-action.delete {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+        
+        .btn-action.delete:hover {
+            background: rgba(220, 53, 69, 0.2);
+        }
+        
+        .task-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .task-status.pending {
+            background: #ffecb3;
+            color: #ff9800;
+        }
+        
+        .task-status.in_progress {
+            background: #bbdefb;
+            color: #2196f3;
+        }
+        
+        .task-status.completed {
+            background: #c8e6c9;
+            color: #4caf50;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h3 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+        
+        .empty-state p {
+            color: #777;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 70px;
+                overflow: visible;
+            }
+            
+            .logo h1, .menu-item span {
+                display: none;
+            }
+            
+            .logo {
+                justify-content: center;
+                padding: 25px 0;
+            }
+            
+            .logo i {
+                margin-right: 0;
+                font-size: 32px;
+            }
+            
+            .menu-item {
+                justify-content: center;
+                padding: 15px 0;
+            }
+            
+            .menu-item i {
+                width: auto;
+                font-size: 20px;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+        .pagination {
+            margin: 20px 0;
+            display: flex;
+            list-style: none;
+            gap: 8px;
+            justify-content: center;
+        }
+        .pagination a,
+        .pagination span {
+            background:#495057;
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+        }
+        .pagination a:hover {
+            background:rgb(136, 131, 131);
+        }
+        .pagination .current-page {
+            background: #2575fc;
+            color: white;
+            border-color:rgb(162, 184, 223);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <i class="fas fa-tasks"></i>
+            <h1>TaskFlow</h1>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="/" style="text-decoration: none; color: inherit;">
+                <div class="menu-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </div>
+            </a>
+
+            <a href="<?= $this->url('task') ?>" style="text-decoration: none; color: inherit;">
+                <div class="menu-item active">
+                    <i class="fas fa-tasks"></i>
+                    <span>Manage Tasks</span>
+                </div>
+            </a>
+            
+            <!-- <div class="menu-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Calendar</span>
+            </div> -->
+
+            <a href="/account/edit" style="text-decoration: none; color: inherit;">
+                <div class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <h2>Task Management</h2>
+            <div class="user-info">
+                <div class="user-avatar"><?= $this->initial ?></div>
+                <button class="logout-btn">
+                    Logout <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="section-title">
+                <i class="fas fa-tasks"></i>
+                My Tasks
+            </div>
+            
+            <div class="task-actions">
+                <a href="<?= $this->url('task', ['action' => 'create']) ?>" class="btn-add">
+                    <i class="fas fa-plus"></i> Add New Task
+                </a>
+            </div>
+
+            <form method="get" class="filters" style="margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap;">
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Search title"
+                    value="<?= $this->escapeHtmlAttr($this->title) ?>"
+                    style="padding:8px; border:1px solid #ccc; border-radius:4px;"
+                />
+                <input
+                    type="text"
+                    name="description"
+                    placeholder="Search description"
+                    value="<?= $this->escapeHtmlAttr($this->description) ?>"
+                    style="padding:8px; border:1px solid #ccc; border-radius:4px;"
+                />
+                <input
+                    type="date"
+                    name="task_date"
+                    placeholder="Search task date"
+                    value="<?= $this->escapeHtmlAttr($this->task_date) ?>"
+                    style="padding:8px; border:1px solid #ccc; border-radius:4px;"
+                />
+                <select name="status" style="padding:8px; border:1px solid #ccc; border-radius:4px;">
+                    <option value="">All status</option>
+                    <option value="pending"     <?= $this->status==='pending'     ? 'selected' : '' ?>>Pending</option>
+                    <option value="in_progress" <?= $this->status==='in_progress' ? 'selected' : '' ?>>In Progress</option>
+                    <option value="completed"   <?= $this->status==='completed'   ? 'selected' : '' ?>>Completed</option>
+                </select>
+                <button type="submit" class="btn-add" style="padding:8px 12px;">
+                    <i class="fas fa-filter"></i> Filtrar
+                </button>
+            </form>
+
+            <?php if (count($this->tasks) > 0): ?>
+                <div class="tasks-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Task Date</th>
+                                <th>Created At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($this->tasks as $task): ?>
+                                <tr>
+                                    <td><?= $this->escapeHtml($task['title']) ?></td>
+                                    <td><?= $this->escapeHtml($task['description']) ?></td>
+                                    <td>
+                                        <span class="task-status <?= $task['status'] ?>">
+                                            <?= ucfirst(str_replace('_', ' ', $task['status'])) ?>
+                                        </span>
+                                    </td>
+                                    <td><?= date('d/m/Y', strtotime($task['task_date'])) ?></td>
+                                    <td><?= date('d/m/Y H:i', strtotime($task['created_at'])) ?></td>
+                                    <td class="actions">
+                                        <?php if ($task['status'] == 'pending'): ?>
+                                            <a href="<?= $this->url('task', [
+                                                'action' => 'update-status',
+                                                'token'  => $task['token'],
+                                                'status' => 'in_progress'
+                                            ]) ?>" class="btn-action start">
+                                                <i class="fas fa-play"></i> Start
+                                            </a>
+                                        <?php elseif (in_array($task['status'], ['in_progress','completed'])): ?>
+                                            <a href="<?= $this->url('task', [
+                                                'action' => 'update-status',
+                                                'token'  => $task['token'],
+                                                'status' => 'pending'
+                                            ]) ?>" class="btn-action reopen">
+                                                <i class="fas fa-undo"></i> Reopen
+                                            </a>
+                                            <?php if ($task['status'] !== 'completed'): ?>
+                                                <a href="<?= $this->url('task', [
+                                                    'action' => 'update-status',
+                                                    'token'  => $task['token'],
+                                                    'status' => 'completed'
+                                                ]) ?>" class="btn-action complete">
+                                                    <i class="fas fa-check"></i> Complete
+                                                </a>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+
+                                        <a href="<?= $this->url('task',['action'=>'edit','token'=>$task['token']]) ?>" class="btn-action edit">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <a href="<?= $this->url('task',['action'=>'delete','token'=>$task['token']]) ?>"
+                                           class="btn-action delete" data-token="<?= $task['token'] ?>">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+
+                <?php if ($this->totalPages > 1): ?>
+                    <?php 
+                        $baseQuery = [
+                            'search' => $this->search,
+                            'status' => $this->status,
+                        ];
+                    ?>
+                    <ul class="pagination">
+                        <?php if ($this->currentPage > 1): ?>
+                            <li>
+                                <a href="<?= $this->url('task', [], [
+                                    'query' => array_merge($baseQuery, ['page'=>$this->currentPage-1])
+                                ]) ?>">&laquo; Anterior</a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php for ($p = 1; $p <= $this->totalPages; $p++): ?>
+                            <?php if ($p == $this->currentPage): ?>
+                                <li><span class="current-page"><?= $p ?></span></li>
+                            <?php else: ?>
+                                <li>
+                                    <a href="<?= $this->url('task', [], [
+                                        'query'=>array_merge($baseQuery, ['page'=>$p])
+                                    ]) ?>"><?= $p ?></a>
+                                </li>
+                            <?php endif; ?>
+                        <?php endfor; ?>
+
+                        <?php if ($this->currentPage < $this->totalPages): ?>
+                            <li>
+                                <a href="<?= $this->url('task', [], [
+                                    'query'=>array_merge($baseQuery, ['page'=>$this->currentPage+1])
+                                ]) ?>">Próxima &raquo;</a>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                <?php endif; ?>
+
+            <?php else: ?>
+                <div class="empty-state">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h3>No tasks found</h3>
+                    <p>You haven't created any tasks yet. Start now!</p>
+                </div>
+            <?php endif; ?>
+
+        </div>
+    </div>
+
+    <div id="toast" class="toast">
+        <span id="toast-message"></span>
+    </div>
+
+    <script> 
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        document.querySelectorAll('a.delete').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!confirm('Are you sure?')) return;
+                fetch(this.href, { method: 'POST', headers: { 'Accept': 'application/json' } })
+                .then(res => res.json())
+                .then(json => {
+                    if (json.success) {
+                        showToast('Task deleted.');
+                        const row = this.closest('tr');
+                        if (row) row.remove();
+                    } else {
+                        showToast(json.messages.delete?.[0] || 'Error deleting task.');
+                    }
+                })
+                .catch(() => showToast('Network error.'));
+            });
+        });
+
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/account/logout';
+            }
+        });
+
+        document.querySelectorAll('.menu-item').forEach(item => {
+            const linkText = item.querySelector('a, span').textContent.trim();
+            item.classList.toggle('active', linkText === 'Manage Tasks');
+        });
+    </script>
+</body>
+
+</html>
